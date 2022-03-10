@@ -1,5 +1,6 @@
 html {
     font-size: 16px;
+    box-sizing: border-box;
 }
 
 body {
@@ -13,6 +14,7 @@ body {
     position: sticky;
     background-color: white;
     top: -2rem;
+    z-index: 1;
 }
 
 #top-1 {
@@ -23,6 +25,7 @@ body {
 #search {
     flex: 4;
     background-color: rgb(228, 228, 228);
+    border: none;
     border-radius: 0.5rem;
     width: 80%;
     font-size: 1rem;
@@ -41,6 +44,10 @@ body {
     overflow-x: scroll;
     list-style-type: none;
     height: 3rem;
+}
+
+#top-2 ul::-webkit-scrollbar {
+    width: 0 !important
 }
 
 #top-2 ul li {
@@ -114,27 +121,32 @@ body {
     margin-right: 0.5rem;
 }
 
-#No1 {
+.No1 {
     border-radius: 00.2rem;
+    width: 1.4rem;
+    height: 1.4rem;
     background-color: brown;
     color: white;
 }
 
-#No2 {
+.No2 {
     border-radius: 00.2rem;
+    width: 1.4rem;
+    height: 1.4rem;
     background-color: rgb(253, 123, 76);
     color: white;
 }
 
-#No3 {
+.No3 {
     border-radius: 00.2rem;
+    width: 1.4rem;
+    height: 1.4rem;
     background-color: rgb(251, 251, 24);
     color: white;
 }
 
 .top-3 {
     background-color: white;
-    padding: ;
     position: sticky;
     top: 3rem;
 }
@@ -158,4 +170,86 @@ body {
 .top-3 .choosed {
     background-color: rgb(99, 109, 255);
     color: rgb(255, 255, 255);
+}
+
+.content-box {
+    padding: 1rem 0;
+}
+
+#reBang-top-discription {
+    display: flex;
+    padding: 1rem;
+    background-color: white;
+}
+
+#reBang-top-discription>span {
+    margin-left: 1rem;
+    width: 50%;
+    font-weight: 600;
+}
+
+#reBang-top-discription .reBang-top-box {
+    padding: 0.3rem;
+    margin: 1rem;
+    font-size: small;
+    border-radius: 20%;
+    background-color: rgb(221, 239, 255);
+    color: rgb(100, 100, 255);
+}
+
+#rebang-content-box {
+    background-color: white;
+}
+
+#rebang-content-box ul {
+    list-style-type: none;
+    margin-top: 0;
+    padding: 1rem;
+}
+
+#rebang-content-box li {
+    display: flex;
+    align-items: start;
+    margin-bottom: 1rem;
+    border: 0.1rem rgb(110, 110, 110);
+}
+
+.reBang-num {
+    width: 1.4rem;
+    height: 1.4rem;
+    margin-right: 1rem;
+    text-align: center;
+}
+
+.right-block {
+    flex: 1;
+}
+
+.right-block .reBang-author {
+    color: rgb(146, 146, 146);
+    font-size: small;
+    font-weight: 300;
+    float: left;
+}
+
+.right-block .reBang-hot {
+    color: rgb(179, 179, 179);
+    font-size: small;
+    font-weight: 300;
+    float: right;
+}
+
+#bottom-tab {
+    position: fixed;
+    bottom: 0;
+    display: flex;
+    justify-content: space-around;
+    background-color: white;
+    width: 100%;
+    padding: 1rem 0;
+}
+
+#bottom div {
+    color: rgb(167, 167, 167);
+    width: 15%;
 }
