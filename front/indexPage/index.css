@@ -1,0 +1,73 @@
+body {
+    background-color: rgb(228, 228, 228);
+    box-sizing: border-box;
+}
+
+#top-tab {
+    align-items: stretch;
+    flex-direction: column;
+    position: sticky;
+    background-color: white;
+    top: -2rem;
+}
+
+#top-1 {
+    display: flex;
+    height: 2rem;
+}
+
+#search {
+    flex: 4;
+    background-color: rgb(228, 228, 228);
+    border-radius: 0.5rem;
+    width: 80%;
+    font-size: 1rem;
+    text-align: center;
+}
+
+#check-in {
+    flex: 1;
+    margin: 0.5rem;
+    font-size: 1rem;
+    text-align: center;
+}
+
+#top-2 ul {
+    display: flex;
+    overflow-x: scroll;
+    list-style-type: none;
+    height: 3rem;
+}
+
+#top-2 ul li {
+    margin: 0 2rem;
+    font-size: 1rem;
+}
+
+.child-content {
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    border-radius: 1rem;
+    margin: 0.9rem;
+    padding: 1.3rem;
+}
+
+.title {
+    font-size: 1.2rem;
+    font-weight: 500;
+}
+
+.discription {
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+    color: rgb(116, 116, 116);
+    font-size: 0.9rem;
+    font-weight: lighter;
+}
+
+.author {
+    padding-right: 0.5rem;
+    margin-right: 0.5rem;
+    border-right: 0.1rem solid rgb(209, 209, 209);
+}
