@@ -3,11 +3,15 @@ let koa = require('koa');
 let url = require('url');
 
 let app = new koa();
+let indexCopyResult
 let indexResult;
 let indexReBangQianDuanResult;
 let indexReBangHouDuanResult;
-let cssResult;
-let jsResult;
+let indexCSSResult;
+let indexJSResult;
+let feiDianResult;
+let feiDianCSSResult;
+let feiDianJSResult;
 
 function rdHTMLData() {
     fs.readFile('./index.html', 'utf-8', function(err, data) {
@@ -37,13 +41,27 @@ function rdHTMLData() {
             indexCopyResult = data;
         }
     })
+
+    fs.readFile('./pages/feiDian.html', 'utf-8', function(err, data) {
+        if (err) { console.log(err) } else {
+            console.log(data);
+            feiDianResult = data;
+        }
+    })
 }
 
 function rdCSSData() {
     fs.readFile('./css/index.css', 'utf-8', function(err, data) {
         if (err) { console.log(err) } else {
             console.log(data);
-            cssResult = data;
+            indexCSSResult = data;
+        }
+    })
+
+    fs.readFile('./css/feiDian.css', 'utf-8', function(err, data) {
+        if (err) { console.log(err) } else {
+            console.log(data);
+            feiDianCSSResult = data;
         }
     })
 }
@@ -52,7 +70,14 @@ function rdJSData() {
     fs.readFile('./js/index.js', 'utf-8', function(err, data) {
         if (err) { console.log(err) } else {
             console.log(data);
-            jsResult = data;
+            Result = data;
+        }
+    })
+
+    fs.readFile('./js/index.js', 'utf-8', function(err, data) {
+        if (err) { console.log(err) } else {
+            console.log(data);
+            feiDianJSResult = data;
         }
     })
 }
@@ -76,13 +101,22 @@ app.use(async(ctx, next) => {
         ctx.body = indexReBangHouDuanResult;
     } else if (ctx.request.path == '/css/index.css') {
         ctx.response.type = 'text/css; charset=utf-8';
-        ctx.body = cssResult;
+        ctx.body = indexCSSResult;
     } else if (ctx.request.path == '/js/index.js') {
         ctx.response.type = 'application/javascript; charset=utf-8';
-        ctx.body = jsResult;
+        ctx.body = indexJSResult;
     } else if (ctx.request.path == '/pages/index-copy') {
         ctx.response.type = 'text/html; charset=utf-8';
         ctx.body = indexCopyResult;
+    } else if (ctx.request.path == '/pages/feiDian') {
+        ctx.response.type = 'text/html; charset=utf-8';
+        ctx.body = feiDianResult;
+    } else if (ctx.request.path == '/css/feiDian.css') {
+        ctx.response.type = 'text/css; charset=utf-8';
+        ctx.body = feiDianCSSResult;
+    } else if (ctx.request.path == '/js/feiDian.js') {
+        ctx.response.type = 'application/javascript; charset=utf-8';
+        ctx.body = feiDianJSResult;
     }
     await next();
 })

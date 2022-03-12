@@ -1,9 +1,12 @@
 const topTabBtn = document.querySelector('#top-2 ul');
 const mainContent = document.getElementById('main-content');
+const bottomBtn = document.querySelector('bottom-tab')
+
 let reBangTop2Btn;
 
 
 let result = '';
+
 
 
 function refreshPage(pathName) {
@@ -56,7 +59,6 @@ topTabBtn.addEventListener('click', function(e) {
 
 
 })
-
 
 
 
