@@ -70,11 +70,11 @@ function rdJSData() {
     fs.readFile('./js/index.js', 'utf-8', function(err, data) {
         if (err) { console.log(err) } else {
             console.log(data);
-            Result = data;
+            indexJSResult = data;
         }
     })
 
-    fs.readFile('./js/index.js', 'utf-8', function(err, data) {
+    fs.readFile('./js/feiDianJSResult.js', 'utf-8', function(err, data) {
         if (err) { console.log(err) } else {
             console.log(data);
             feiDianJSResult = data;
