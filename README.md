@@ -2,7 +2,7 @@
  
 ## 页面查看方法
 
-在node.js环境下运行`nodejs`文件夹下的`ChildPageRefresh.js`文件，浏览器输入http://localhost:3000/访问页面。
+在node.js环境下运行`nodejs`文件夹下的`ChildPageRefresh.js`文件，浏览器输入 http://localhost:3000/ 访问页面。
 
 ## 文件结构
 ```
