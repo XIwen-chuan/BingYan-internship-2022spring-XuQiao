@@ -12,6 +12,10 @@ let indexJSResult;
 let feiDianResult;
 let feiDianCSSResult;
 let feiDianJSResult;
+let myHomeResult;
+let myHomeCSSResult;
+let myHomeJSResult;
+let picResult;
 
 function rdHTMLData() {
     fs.readFile('./index.html', 'utf-8', function(err, data) {
@@ -48,6 +52,13 @@ function rdHTMLData() {
             feiDianResult = data;
         }
     })
+
+    fs.readFile('./pages/myHome.html', 'utf-8', function(err, data) {
+        if (err) { console.log(err) } else {
+            console.log(data);
+            myHomeResult = data;
+        }
+    })
 }
 
 function rdCSSData() {
@@ -64,6 +75,13 @@ function rdCSSData() {
             feiDianCSSResult = data;
         }
     })
+
+    fs.readFile('./css/myHome.css', 'utf-8', function(err, data) {
+        if (err) { console.log(err) } else {
+            console.log(data);
+            myHomeCSSResult = data;
+        }
+    })
 }
 
 function rdJSData() {
@@ -74,10 +92,26 @@ function rdJSData() {
         }
     })
 
-    fs.readFile('./js/feiDianJSResult.js', 'utf-8', function(err, data) {
+    fs.readFile('./js/feiDian.js', 'utf-8', function(err, data) {
         if (err) { console.log(err) } else {
             console.log(data);
             feiDianJSResult = data;
+        }
+    })
+
+    fs.readFile('./js/myHome.js', 'utf-8', function(err, data) {
+        if (err) { console.log(err) } else {
+            console.log(data);
+            myHomeJSResult = data;
+        }
+    })
+}
+
+function rdIMGData() {
+    fs.readFile('./images/pic01.jpg', function(err, data) {
+        if (err) { console.log(err) } else {
+            console.log(data);
+            picResult = data;
         }
     })
 }
@@ -85,7 +119,7 @@ function rdJSData() {
 rdHTMLData();
 rdCSSData();
 rdJSData();
-
+rdIMGData();
 
 
 app.use(async(ctx, next) => {
@@ -117,6 +151,17 @@ app.use(async(ctx, next) => {
     } else if (ctx.request.path == '/js/feiDian.js') {
         ctx.response.type = 'application/javascript; charset=utf-8';
         ctx.body = feiDianJSResult;
+    } else if (ctx.request.path == '/pages/myHome') {
+        ctx.response.type = 'text/html; charset=utf-8';
+        ctx.body = myHomeResult;
+    } else if (ctx.request.path == '/css/myHome.css') {
+        ctx.response.type = 'text/css; charset=utf-8';
+        ctx.body = myHomeCSSResult;
+    } else if (ctx.request.path == '/js/myHome.js') {
+        ctx.response.type = 'application/javascript; charset=utf-8';
+        ctx.body = myHomeJSResult;
+    } else if (ctx.request.path == '/images/pic01.jpg') {
+        ctx.body = picResult;
     }
     await next();
 })
