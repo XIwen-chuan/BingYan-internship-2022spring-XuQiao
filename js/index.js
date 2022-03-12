@@ -6,7 +6,6 @@ let reBangTop2Btn;
 let result = '';
 
 
-
 function refreshPage(pathName) {
     let text = '';
     const logProcess = (res) => {
@@ -20,7 +19,6 @@ function refreshPage(pathName) {
         };
         return reader.read().then(push);
     };
-
 
     fetch('http://localhost:3000/' + pathName)
         .then(logProcess)
@@ -40,10 +38,7 @@ function refreshPage(pathName) {
                         break;
                 }
             })
-
         });
-
-
 }
 
 topTabBtn.addEventListener('click', function(e) {
