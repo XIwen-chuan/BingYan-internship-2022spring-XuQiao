@@ -73,9 +73,6 @@ topTabBtn.addEventListener('click', function(e) {
             refreshPage('pages/index-copy');
             break;
     }
-
-
-
 })
 
 if (localStorage.getItem('theme') == 'dark') {
