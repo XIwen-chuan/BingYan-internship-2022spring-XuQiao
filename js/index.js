@@ -1,8 +1,14 @@
+import { pullRefresh } from './indexRefresh.js';
+
 const topTabBtn = document.querySelector('#top-2 ul');
 const mainContent = document.getElementById('main-content');
 const bottomBtn = document.querySelector('bottom-tab')
 
+const pullRefreshObj = pullRefresh();
+pullRefreshObj.init(pullRefreshObj.finish());
+
 let reBangTop2Btn;
+let spreadBtn;
 
 
 let result = '';
@@ -39,6 +45,18 @@ function refreshPage(pathName) {
                     case '后端':
                         refreshPage('pages/index-reBang-houDuan')
                         break;
+                }
+            })
+
+            spreadBtn = document.querySelector('.top-3 button');
+            let reBangTop2ChildBtn
+
+            spreadBtn.addEventListener('click', function(e) {
+                e.target.classList.toggle('selected');
+                if (e.target.classList.contains('selected')) {
+                    reBangTop2Btn.style.flexWrap = 'wrap';
+                } else if (!e.target.classList.contains('selected')) {
+                    reBangTop2Btn.style.flexWrap = 'nowrap';
                 }
             })
         });

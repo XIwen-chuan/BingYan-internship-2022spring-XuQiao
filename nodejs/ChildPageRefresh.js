@@ -16,6 +16,7 @@ let myHomeResult;
 let myHomeCSSResult;
 let myHomeJSResult;
 let picResult;
+let refreshModuleJS;
 
 function rdHTMLData() {
     fs.readFile('./index.html', 'utf-8', function(err, data) {
@@ -105,6 +106,13 @@ function rdJSData() {
             myHomeJSResult = data;
         }
     })
+
+    fs.readFile('./js/indexRefresh.js', 'utf-8', function(err, data) {
+        if (err) { console.log(err) } else {
+            console.log(data);
+            refreshModuleJS = data;
+        }
+    })
 }
 
 function rdIMGData() {
@@ -162,6 +170,9 @@ app.use(async(ctx, next) => {
         ctx.body = myHomeJSResult;
     } else if (ctx.request.path == '/images/pic01.jpg') {
         ctx.body = picResult;
+    } else if (ctx.request.path == '/js/indexRefresh.js') {
+        ctx.response.type = 'application/javascript; charset=utf-8';
+        ctx.body = refreshModuleJS;
     }
     await next();
 })
