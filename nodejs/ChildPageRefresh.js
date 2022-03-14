@@ -1,63 +1,90 @@
 let fs = require('fs');
+const { request } = require('http');
 let koa = require('koa');
-let url = require('url');
+let bodyParser = require('koa-bodyparser');
+let router = require('koa-router')();
+
 
 let app = new koa();
 let indexCopyResult
 let indexResult;
-let indexReBangQianDuanResult;
-let indexReBangHouDuanResult;
 let indexCSSResult;
 let indexJSResult;
+let indexReBangQianDuanResult;
+let indexReBangHouDuanResult;
+
 let feiDianResult;
 let feiDianCSSResult;
 let feiDianJSResult;
+
 let myHomeResult;
 let myHomeCSSResult;
 let myHomeJSResult;
+
 let picResult;
+
 let refreshModuleJS;
+
+let loginResult;
+let loginCSSResult;
+let loginJSResult;
+
+let signinResult;
+let signinCSSResult;
+let signinJSResult;
+
+
+let cleanData;
+let primaryData, afterData;
+let username, password;
+
 
 function rdHTMLData() {
     fs.readFile('./index.html', 'utf-8', function(err, data) {
         if (err) { console.log(err) } else {
-            console.log(data);
             indexResult = data;
         }
     })
 
     fs.readFile('./pages/index-reBang-qianDuan.html', 'utf-8', function(err, data) {
         if (err) { console.log(err) } else {
-            console.log(data);
             indexReBangQianDuanResult = data;
         }
     })
 
     fs.readFile('./pages/index-reBang-houDuan.html', 'utf-8', function(err, data) {
         if (err) { console.log(err) } else {
-            console.log(data);
             indexReBangHouDuanResult = data;
         }
     })
 
     fs.readFile('./pages/index-copy.html', 'utf-8', function(err, data) {
         if (err) { console.log(err) } else {
-            console.log(data);
             indexCopyResult = data;
         }
     })
 
     fs.readFile('./pages/feiDian.html', 'utf-8', function(err, data) {
         if (err) { console.log(err) } else {
-            console.log(data);
             feiDianResult = data;
         }
     })
 
     fs.readFile('./pages/myHome.html', 'utf-8', function(err, data) {
         if (err) { console.log(err) } else {
-            console.log(data);
             myHomeResult = data;
+        }
+    })
+
+    fs.readFile('./pages/login.html', 'utf-8', function(err, data) {
+        if (err) { console.log(err) } else {
+            loginResult = data;
+        }
+    })
+
+    fs.readFile('./pages/signin.html', 'utf-8', function(err, data) {
+        if (err) { console.log(err) } else {
+            signinResult = data;
         }
     })
 }
@@ -65,22 +92,31 @@ function rdHTMLData() {
 function rdCSSData() {
     fs.readFile('./css/index.css', 'utf-8', function(err, data) {
         if (err) { console.log(err) } else {
-            console.log(data);
             indexCSSResult = data;
         }
     })
 
     fs.readFile('./css/feiDian.css', 'utf-8', function(err, data) {
         if (err) { console.log(err) } else {
-            console.log(data);
             feiDianCSSResult = data;
         }
     })
 
     fs.readFile('./css/myHome.css', 'utf-8', function(err, data) {
         if (err) { console.log(err) } else {
-            console.log(data);
             myHomeCSSResult = data;
+        }
+    })
+
+    fs.readFile('./css/login.css', 'utf-8', function(err, data) {
+        if (err) { console.log(err) } else {
+            loginCSSResult = data;
+        }
+    })
+
+    fs.readFile('./css/signin.css', 'utf-8', function(err, data) {
+        if (err) { console.log(err) } else {
+            signinCSSResult = data;
         }
     })
 }
@@ -88,29 +124,37 @@ function rdCSSData() {
 function rdJSData() {
     fs.readFile('./js/index.js', 'utf-8', function(err, data) {
         if (err) { console.log(err) } else {
-            console.log(data);
             indexJSResult = data;
         }
     })
 
     fs.readFile('./js/feiDian.js', 'utf-8', function(err, data) {
         if (err) { console.log(err) } else {
-            console.log(data);
             feiDianJSResult = data;
         }
     })
 
     fs.readFile('./js/myHome.js', 'utf-8', function(err, data) {
         if (err) { console.log(err) } else {
-            console.log(data);
             myHomeJSResult = data;
         }
     })
 
     fs.readFile('./js/indexRefresh.js', 'utf-8', function(err, data) {
         if (err) { console.log(err) } else {
-            console.log(data);
             refreshModuleJS = data;
+        }
+    })
+
+    fs.readFile('./js/login.js', 'utf-8', function(err, data) {
+        if (err) { console.log(err) } else {
+            loginJSResult = data;
+        }
+    })
+
+    fs.readFile('./js/signin.js', 'utf-8', function(err, data) {
+        if (err) { console.log(err) } else {
+            signinJSResult = data;
         }
     })
 }
@@ -118,17 +162,47 @@ function rdJSData() {
 function rdIMGData() {
     fs.readFile('./images/pic01.jpg', function(err, data) {
         if (err) { console.log(err) } else {
-            console.log(data);
             picResult = data;
         }
     })
 }
+
+/*
+function readBody(request) {
+    return new Promise((resolve, reject) => {
+        let body = [];
+        request.on('data', (chunk) => {
+            body.push(chunk)
+        });
+        request.on('end', () => {
+            body = Buffer.concat(body).toString();
+            resolve(body)
+        })
+    })
+}
+*/
 
 rdHTMLData();
 rdCSSData();
 rdJSData();
 rdIMGData();
 
+fs.readFile('./database/datacollection.json', 'utf-8', function(err, data) {
+    if (err) console.log(err);
+    else {
+        try {
+            data = JSON.parse(data);
+            primaryData = data;
+        } catch (exception) {
+            primaryData = [];
+        }
+    }
+})
+
+app.use(async(ctx, next) => {
+    console.log(`Process ${ctx.request.method} ${ctx.request.url}...`);
+    await next();
+});
 
 app.use(async(ctx, next) => {
     if (ctx.request.path == '/') {
@@ -173,9 +247,56 @@ app.use(async(ctx, next) => {
     } else if (ctx.request.path == '/js/indexRefresh.js') {
         ctx.response.type = 'application/javascript; charset=utf-8';
         ctx.body = refreshModuleJS;
+    } else if (ctx.request.path == '/login') {
+        ctx.response.type = 'text/html; charset=utf-8';
+        ctx.body = loginResult;
+    } else if (ctx.request.path == '/css/login.css') {
+        ctx.response.type = 'text/css; charset=utf-8';
+        ctx.body = loginCSSResult;
+    } else if (ctx.request.path == '/js/login.js') {
+        ctx.response.type = 'application/javascript; charset=utf-8';
+        ctx.body = loginJSResult;
+    } else if (ctx.request.path == '/signin') {
+        ctx.response.type = 'text/html; charset=utf-8';
+        ctx.body = signinResult;
+    } else if (ctx.request.path == '/css/signin.css') {
+        ctx.response.type = 'text/css; charset=utf-8';
+        ctx.body = signinCSSResult;
+    } else if (ctx.request.path == '/js/signin.js') {
+        ctx.response.type = 'application/javascript; charset=utf-8';
+        ctx.body = signinJSResult;
     }
     await next();
 })
 
+app.use(bodyParser());
+
+router.post('/signin-process', async function(ctx, next) {
+    console.log(`Process ${ctx.request.method} ${ctx.request.url}...`);
+
+    console.log(ctx.request);
+
+    username = request.body.username;
+    password = request.body.password;
+
+    await next();
+})
+
+app.use(router.routes());
+
+app.use(async function(ctx, next) {
+    primaryData.push({
+        "username": username,
+        "password": password
+    })
+    afterData = JSON.stringify(primaryData);
+
+    fs.writeFile('./database/datacollection.json', afterData, function(err, result) {
+        if (err) { console.log(err) }
+    })
+
+})
 
 app.listen(3000);
+
+console.log('Now server running on http://localhost:3000 ......')
