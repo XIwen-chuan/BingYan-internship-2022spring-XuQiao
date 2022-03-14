@@ -2,6 +2,7 @@ const form = document.getElementById('form')
 const username = document.getElementById('username')
 const password = document.getElementById('password')
 const password2 = document.getElementById('password2')
+const submBtn = document.getElementsByTagName('button')
 
 let flag01, flag02, flag03;
 
@@ -62,8 +63,7 @@ function getFieldName(input) {
     return input.id.charAt(0).toUpperCase() + input.id.slice(1);
 }
 
-form.addEventListener('submit', function(e) {
-    e.preventDefault();
+submBtn.addEventListener('click', function(e) {
 
     if (checkRequired([username])) {
         flag01 = checkLength(username, 3, 15);
@@ -75,13 +75,6 @@ form.addEventListener('submit', function(e) {
         flag03 = checkPasswordsMatch(password, password2);
     }
 
-    if (flag01 && flag02 && flag03) {
-        let usernameInput = getElementById('username');
-        let passwordInput = getElementById('password')
-        let hash = {};
-
-        hash['username'] = usernameInput;
-        hash['password'] = passwordInput;
-    }
+    if (flag01 && flag02 && flag03) {} else { e.preventDefault() }
 
 });

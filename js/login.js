@@ -1,8 +1,10 @@
 const form = document.getElementById('form')
 const username = document.getElementById('username')
 const password = document.getElementById('password')
+const password2 = document.getElementById('password2')
+const submBtn = document.getElementsByTagName('button')
 
-var flag = 0;
+let flag01, flag02;
 
 function showError(input, message) {
     const formControl = input.parentElement;
@@ -11,17 +13,13 @@ function showError(input, message) {
     small.innerText = message;
 }
 
-
 function showSuccess(input) {
     const formControl = input.parentElement;
     formControl.className = 'form-control success';
 }
 
-
-
-
 function checkRequired(inputArr) {
-    let isRequired = false;
+    let result = false;
     var itemIsRequired = new Array();
     inputArr.forEach(function(input) {
         if (input.value.trim() === '') {
@@ -31,11 +29,11 @@ function checkRequired(inputArr) {
             isRequired = true
         }
     });
-    return isRequired;
+    return result;
 }
 
-
 function checkLength(input, min, max) {
+    let result = false;
     if (input.value.length < min) {
         showError(
             input,
@@ -48,24 +46,24 @@ function checkLength(input, min, max) {
         );
     } else {
         showSuccess(input);
+        result = true
     }
+    return result;
 }
-
-
 
 function getFieldName(input) {
     return input.id.charAt(0).toUpperCase() + input.id.slice(1);
 }
 
-
-form.addEventListener('submit', function(e) {
-    e.preventDefault();
+submBtn.addEventListener('click', function(e) {
 
     if (checkRequired([username])) {
-        checkLength(username, 3, 15);
+        flag01 = checkLength(username, 3, 15);
     }
     if (checkRequired([password])) {
-        checkLength(password, 6, 25);
+        flag02 = checkLength(password, 6, 25);
     }
+
+    if (flag01 && flag02) {} else { e.preventDefault() }
 
 });

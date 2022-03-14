@@ -5,13 +5,13 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <link rel="stylesheet" href="../css/signin.css">
+    <link rel="stylesheet" href="../css/login.css">
     <title>登录</title>
 </head>
 
 <body>
     <div class="container">
-        <form id="form" class="form">
+        <form id="form" class="form" action="http://localhost:3000/loginProcess" method="post">
             <h2>登录</h2>
             <div class="form-control">
                 <label for="username">Username</label>
@@ -24,11 +24,11 @@
                 <input type="password" id="password" placeholder="Enter password">
                 <small>Error message</small>
             </div>
-            <button type="submit">提交</button>
+            <button type="submit" action="http://localhost:3000/loginProcess" method="post">提交</button>
         </form>
     </div>
 
-    <script src="../js/signin.js"></script>
+    <script src="../js/login.js"></script>
 </body>
 
 </html>

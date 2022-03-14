@@ -1,5 +1,4 @@
 let fs = require('fs');
-const { request } = require('http');
 let koa = require('koa');
 let bodyParser = require('koa-bodyparser');
 let router = require('koa-router')();
@@ -197,6 +196,7 @@ fs.readFile('./database/datacollection.json', 'utf-8', function(err, data) {
             primaryData = [];
         }
     }
+    console.log(primaryData)
 })
 
 app.use(async(ctx, next) => {
@@ -235,7 +235,49 @@ app.use(async(ctx, next) => {
         ctx.body = feiDianJSResult;
     } else if (ctx.request.path == '/pages/myHome') {
         ctx.response.type = 'text/html; charset=utf-8';
-        ctx.body = myHomeResult;
+        let _ctxBody = myHomeResult;
+
+        let cookies = ''
+
+        if (ctx.headers['Cookie']) {
+            cookies = ctx.headers['Cookie'].split('; ')
+        }
+
+        let hash = {};
+        for (let i = 0; i < cookies.length; i++) {
+            let parts = cookies[i].split('=');
+            let key = parts[0];
+            let value = parts[1];
+            hash[key] = value;
+        }
+
+        let cookieUsername = hash.username;
+        let users;
+
+        fs.readFileSync('./database/datacollection.json', 'utf8', function(err, data) {
+            users = data;
+        })
+
+        try {
+            users = JSON.parse(users);
+        } catch (err) { users = {} }
+
+
+        let foundUser
+        for (let i = 0; i < users.length; i++) {
+            if (users[i].username === cookieUsername) {
+                foundUser = users[i];
+                break
+            }
+        }
+
+        if (foundUser) {
+            _ctxBody.replace('<a href="http://localhost:3000/login" class="login-signin">登录</a><a href="http://localhost:3000/signin" class="login-signin">注册</a>', `<a>${foundUser.username}</a>`)
+            ctx.response.body = _ctxBody;
+        } else {
+            ctx.response.body = _ctxBody;
+        }
+
     } else if (ctx.request.path == '/css/myHome.css') {
         ctx.response.type = 'text/css; charset=utf-8';
         ctx.body = myHomeCSSResult;
@@ -271,20 +313,18 @@ app.use(async(ctx, next) => {
 
 app.use(bodyParser());
 
-router.post('/signin-process', async function(ctx, next) {
+router.post('/signinProcess', async function(ctx, next) {
     console.log(`Process ${ctx.request.method} ${ctx.request.url}...`);
 
     console.log(ctx.request);
 
-    username = request.body.username;
-    password = request.body.password;
+    username = ctx.request.body.username;
+    password = ctx.request.body.password;
 
-    await next();
-})
+    console.log(typeof ctx.response.header)
 
-app.use(router.routes());
+    ctx.response.body = '<h1>注册成功！点击<a href="http://localhost:3000/login">此处</a>跳转到登录页面</h1>'
 
-app.use(async function(ctx, next) {
     primaryData.push({
         "username": username,
         "password": password
@@ -295,7 +335,42 @@ app.use(async function(ctx, next) {
         if (err) { console.log(err) }
     })
 
+    await next();
 })
+
+router.post('/loginProcess', async function(ctx, next) {
+    let found = false;
+
+    console.log(`Process ${ctx.request.method} ${ctx.request.url}...`);
+    console.log(ctx.request);
+
+    username = ctx.request.body.username;
+    password = ctx.request.body.password;
+
+    for (let primaryDataCell in primaryData) {
+        if (username == primaryDataCell.username && password == primaryDataCell.password) {
+            found = true;
+            break;
+        }
+    }
+
+    if (found) {
+        ctx.response.body = '<h1>登录成功！点击<a href="http://localhost:3000/pages/myHome">此处</a>跳转到【我的】页面</h1>'
+        ctx.response.header['Set-Cookie'] = `login_username=${username}`;
+
+    } else {
+        ctx.response.body = '<h1>登录失败，用户名不存在或者密码错误。点击<a href="http://localhost:3000/login">此处</a>重新登录</h1>'
+        ctx.response.status = 401
+    }
+
+
+
+
+
+})
+
+app.use(router.routes());
+
 
 app.listen(3000);
 
