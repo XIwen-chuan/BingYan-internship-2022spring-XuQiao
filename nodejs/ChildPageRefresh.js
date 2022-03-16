@@ -11,6 +11,7 @@ let indexCSSResult;
 let indexJSResult;
 let indexReBangQianDuanResult;
 let indexReBangHouDuanResult;
+let indexTuijianResult;
 
 let feiDianResult;
 let feiDianCSSResult;
@@ -86,6 +87,12 @@ function rdHTMLData() {
             signinResult = data;
         }
     })
+
+    fs.readFile('./pages/index-tuiJian.html', 'utf-8', function(err, data) {
+        if (err) { console.log(err) } else {
+            indexTuijianResult = data;
+        }
+    })
 }
 
 function rdCSSData() {
@@ -118,6 +125,7 @@ function rdCSSData() {
             signinCSSResult = data;
         }
     })
+
 }
 
 function rdJSData() {
@@ -224,6 +232,9 @@ app.use(async(ctx, next) => {
     } else if (ctx.request.path == '/pages/index-copy') {
         ctx.response.type = 'text/html; charset=utf-8';
         ctx.body = indexCopyResult;
+    } else if (ctx.request.path == '/pages/index-tuiJian') {
+        ctx.response.type = 'text/html; charset=utf-8';
+        ctx.body = indexTuijianResult;
     } else if (ctx.request.path == '/pages/feiDian') {
         ctx.response.type = 'text/html; charset=utf-8';
         ctx.body = feiDianResult;
@@ -237,43 +248,38 @@ app.use(async(ctx, next) => {
         ctx.response.type = 'text/html; charset=utf-8';
         let _ctxBody = myHomeResult;
 
-        let cookies = ''
+        let cookies = '';
+        let cookieUsername;
 
-        if (ctx.headers['Cookie']) {
-            cookies = ctx.headers['Cookie'].split('; ')
+        if (ctx.cookies.get('login_username')) {
+            console.log(decodeURIComponent(ctx.cookies.get('login_username')));
+            cookieUsername = decodeURIComponent(ctx.cookies.get('login_username'));
         }
 
-        let hash = {};
-        for (let i = 0; i < cookies.length; i++) {
-            let parts = cookies[i].split('=');
-            let key = parts[0];
-            let value = parts[1];
-            hash[key] = value;
-        }
-
-        let cookieUsername = hash.username;
         let users;
 
-        fs.readFileSync('./database/datacollection.json', 'utf8', function(err, data) {
-            users = data;
-        })
+        let foundUser = false;
 
-        try {
-            users = JSON.parse(users);
-        } catch (err) { users = {} }
+        for (let i = 0; i < primaryData.length; i++) {
 
+            primaryDataCell = primaryData[i];
+            console.log(primaryDataCell);
+            primaryDataCellUserName = primaryDataCell.username;
+            primaryDataCellPswd = primaryDataCell.password;
 
-        let foundUser
-        for (let i = 0; i < users.length; i++) {
-            if (users[i].username === cookieUsername) {
-                foundUser = users[i];
-                break
+            if (username == primaryDataCellUserName) {
+                foundUser = primaryDataCell;
+                break;
             }
         }
 
+
+        console.log(foundUser);
+
         if (foundUser) {
-            _ctxBody.replace('<a href="http://localhost:3000/login" class="login-signin">登录</a><a href="http://localhost:3000/signin" class="login-signin">注册</a>', `<a>${foundUser.username}</a>`)
+            _ctxBody = _ctxBody.replace('<a href="http://localhost:3000/login" class="login-signin">登录</a><a href="http://localhost:3000/signin" class="login-signin">注册</a>', `<a>${foundUser.username}</a>`)
             ctx.response.body = _ctxBody;
+
         } else {
             ctx.response.body = _ctxBody;
         }
@@ -331,7 +337,7 @@ router.post('/signinProcess', async function(ctx, next) {
     })
     afterData = JSON.stringify(primaryData);
 
-    fs.writeFile('./database/datacollection.json', afterData, function(err, result) {
+    fs.writeFileSync('./database/datacollection.json', afterData, function(err) {
         if (err) { console.log(err) }
     })
 
@@ -346,23 +352,34 @@ router.post('/loginProcess', async function(ctx, next) {
 
     username = ctx.request.body.username;
     password = ctx.request.body.password;
+    console.log(username)
+    console.log(password)
 
-    for (let primaryDataCell in primaryData) {
-        if (username == primaryDataCell.username && password == primaryDataCell.password) {
+
+
+    for (let i = 0; i < primaryData.length; i++) {
+        console.log(primaryData[i]);
+
+        primaryDataCell = primaryData[i];
+        primaryDataCellUserName = primaryDataCell.username;
+        primaryDataCellPswd = primaryDataCell.password;
+
+        console.log(username)
+        if ((username == primaryDataCellUserName) && (password == primaryDataCellPswd)) {
             found = true;
             break;
         }
     }
 
     if (found) {
+        ctx.cookies.set('login_username', encodeURIComponent(username));
         ctx.response.body = '<h1>登录成功！点击<a href="http://localhost:3000/pages/myHome">此处</a>跳转到【我的】页面</h1>'
-        ctx.response.header['Set-Cookie'] = `login_username=${username}`;
 
     } else {
         ctx.response.body = '<h1>登录失败，用户名不存在或者密码错误。点击<a href="http://localhost:3000/login">此处</a>重新登录</h1>'
-        ctx.response.status = 401
+        ctx.response.status = 401;
     }
-
+    await next();
 
 
 

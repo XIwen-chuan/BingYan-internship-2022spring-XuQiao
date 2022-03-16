@@ -72,6 +72,8 @@ topTabBtn.addEventListener('click', function(e) {
         case '关注':
             refreshPage('pages/index-copy');
             break;
+        case '推荐':
+            refreshPage('pages/index-tuiJian')
     }
 })
 

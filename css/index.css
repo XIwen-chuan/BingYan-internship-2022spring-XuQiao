@@ -16,6 +16,7 @@ body {
     background-color: white;
     top: -3rem;
     z-index: 1;
+    width: 100%;
 }
 
 #top-1 {
@@ -66,7 +67,19 @@ body {
     background-color: white;
     border-radius: 1rem;
     margin: 0.9rem 0;
-    padding: 1.3rem;
+    width: 100%;
+}
+
+.child-content>div {
+    margin: 0 1.3rem;
+}
+
+.child-content>div:first-child {
+    margin-top: 1.3rem;
+}
+
+.child-content>div:last-child {
+    margin: 1rem 1.3rem;
 }
 
 .title {
@@ -75,8 +88,7 @@ body {
 }
 
 .discription {
-    margin-top: 0.5rem;
-    margin-bottom: 0.5rem;
+    padding: 0.5rem 0;
     color: rgb(116, 116, 116);
     font-size: 0.9rem;
     font-weight: lighter;
@@ -86,6 +98,37 @@ body {
     padding-right: 0.5rem;
     margin-right: 0.5rem;
     border-right: 0.1rem solid rgb(209, 209, 209);
+}
+
+.abstract {
+    max-height: 4rem;
+    overflow: hidden;
+    margin-bottom: 1rem;
+}
+
+.like-num {
+    padding: 0.3rem;
+    color: rgb(233, 233, 233);
+    font-size: 0.6rem;
+    font-weight: lighter;
+    border-radius: 1rem;
+    background-color: rgb(80, 80, 80);
+}
+
+.comments-num {
+    padding: 0.3rem;
+    color: rgb(233, 233, 233);
+    font-size: 0.6rem;
+    font-weight: lighter;
+    border-radius: 1rem;
+    background-color: rgb(80, 80, 80);
+}
+
+.keyword {
+    float: right;
+    border-radius: 0.2rem;
+    background-color: rgb(219, 219, 219);
+    padding: 0.3rem;
 }
 
 #special-content-reBang {
