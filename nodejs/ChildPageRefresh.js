@@ -380,10 +380,6 @@ router.post('/loginProcess', async function(ctx, next) {
         ctx.response.status = 401;
     }
     await next();
-
-
-
-
 })
 
 app.use(router.routes());
